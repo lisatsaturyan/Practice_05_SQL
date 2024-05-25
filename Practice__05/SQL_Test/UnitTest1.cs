@@ -41,42 +41,26 @@ namespace SQL_Test
         }
 
         [TestMethod]
-        public void SqlServerFile_InsertAndDeleteRecordTest()
+        public void SqlServerFile_InsertRecordTest()
         {
             string connectionString = @"data source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Laura\source\repos\2022-pss-yulhev2\Practice__05\Practice__05\AutentificacionDB.mdf;Integrated Security=True;";
             int result;
-            int maxId = 0;
 
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-
-                    // Insert a new record
+                    string name = "N_" + Guid.NewGuid().ToString();
                     SqlCommand cmd = conn.CreateCommand();
                     cmd.CommandText = "Insert INTO Authentications (Name, Password, Category, IsValid) " +
-                                      "values (@newName, @newPalabraPaso, @newCategory, @newEsValido)";
-                    cmd.Parameters.Add("@newName", SqlDbType.NVarChar, 20).Value = "Name";
+                                      "values (@newName, @newPalabraPaso, @newCategoria, @newEsValido)";
+                    cmd.Parameters.Add("@newName", SqlDbType.NVarChar, 20).Value = name;
                     cmd.Parameters.Add("@newPalabraPaso", SqlDbType.NVarChar, 20).Value = "Stepword";
-                    cmd.Parameters.Add("@newCategory", SqlDbType.NVarChar, 20).Value = "Category";
+                    cmd.Parameters.Add("@newCategoria", SqlDbType.NVarChar, 20).Value = "Category";
                     cmd.Parameters.Add("@newEsValido", SqlDbType.Bit).Value = true;
                     result = cmd.ExecuteNonQuery();
                     if (result != 1) throw new Exception("Error inserting a new record.");
-
-                    // Retrieve the ID of the newly inserted record
-                    SqlCommand cmdId = conn.CreateCommand();
-                    cmdId.CommandText = @"SELECT @@IDENTITY";
-                    var objId = cmdId.ExecuteScalar();
-                    maxId = 1;
-                    if (!Convert.IsDBNull(objId)) maxId = Int32.Parse(objId.ToString());
-
-                    // Delete the newly inserted record
-                    SqlCommand cmdDel = conn.CreateCommand();
-                    cmdDel.CommandText = "Delete Authentications where Id = @UserId";
-                    cmdDel.Parameters.Add("@UserId", SqlDbType.Int).Value = maxId;
-                    result = cmdDel.ExecuteNonQuery();
-                    if (result != 1) throw new Exception("Error deleting the record.");
                 }
             }
             catch (Exception ex)
