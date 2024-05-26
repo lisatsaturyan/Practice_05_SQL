@@ -41,7 +41,7 @@ namespace Practice__05
             }
         }
 
-        public AuthenticationCode IsAuthenticatedUser(string id, string password)
+        public AuthenticationCode IsAuthenticatedUser(string id, string password) 
         {
             var user = _users.FirstOrDefault(u => u.Id == id);
 
