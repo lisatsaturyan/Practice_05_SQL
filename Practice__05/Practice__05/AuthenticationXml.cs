@@ -36,7 +36,7 @@ namespace Practice__05
                         Category = element.Element("Category").Value,
                         IsValid = bool.Parse(element.Element("IsValid").Value)
                     };
-                    _users.Add(user);
+                    _users.Add(user); 
                 }
             }
         }
